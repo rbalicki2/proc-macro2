@@ -1,8 +1,8 @@
 #![cfg_attr(not(procmacro2_semver_exempt), allow(dead_code))]
 
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 use std::cell::RefCell;
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 use std::cmp;
 use std::fmt;
 use std::iter;
@@ -32,7 +32,7 @@ impl TokenStream {
     }
 }
 
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 fn get_cursor(src: &str) -> Cursor {
     // Create a dummy file & add it to the codemap
     CODEMAP.with(|cm| {
@@ -46,10 +46,10 @@ fn get_cursor(src: &str) -> Cursor {
     })
 }
 
-#[cfg(not(procmacro2_semver_exempt))]
-fn get_cursor(src: &str) -> Cursor {
-    Cursor { rest: src }
-}
+// #[cfg(not(procmacro2_semver_exempt))]
+// fn get_cursor(src: &str) -> Cursor {
+//     Cursor { rest: src }
+// }
 
 impl FromStr for TokenStream {
     type Err = LexError;
@@ -230,7 +230,7 @@ pub struct LineColumn {
     pub column: usize,
 }
 
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 thread_local! {
     static CODEMAP: RefCell<Codemap> = RefCell::new(Codemap {
         // NOTE: We start with a single dummy file which all call_site() and
@@ -243,14 +243,14 @@ thread_local! {
     });
 }
 
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 struct FileInfo {
     name: String,
     span: Span,
     lines: Vec<usize>,
 }
 
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 impl FileInfo {
     fn offset_line_column(&self, offset: usize) -> LineColumn {
         assert!(self.span_within(Span {
@@ -276,7 +276,7 @@ impl FileInfo {
 }
 
 /// Computesthe offsets of each line in the given source string.
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 fn lines_offsets(s: &str) -> Vec<usize> {
     let mut lines = vec![0];
     let mut prev = 0;
@@ -287,12 +287,12 @@ fn lines_offsets(s: &str) -> Vec<usize> {
     lines
 }
 
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 struct Codemap {
     files: Vec<FileInfo>,
 }
 
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 impl Codemap {
     fn next_start_pos(&self) -> u32 {
         // Add 1 so there's always space between files.
@@ -332,19 +332,19 @@ impl Codemap {
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub struct Span {
-    #[cfg(procmacro2_semver_exempt)]
+    // #[cfg(procmacro2_semver_exempt)]
     lo: u32,
-    #[cfg(procmacro2_semver_exempt)]
+    // #[cfg(procmacro2_semver_exempt)]
     hi: u32,
 }
 
 impl Span {
-    #[cfg(not(procmacro2_semver_exempt))]
-    pub fn call_site() -> Span {
-        Span {}
-    }
+    // #[cfg(not(procmacro2_semver_exempt))]
+    // pub fn call_site() -> Span {
+    //     Span {}
+    // }
 
-    #[cfg(procmacro2_semver_exempt)]
+    // #[cfg(procmacro2_semver_exempt)]
     pub fn call_site() -> Span {
         Span { lo: 0, hi: 0 }
     }
@@ -364,7 +364,7 @@ impl Span {
         other
     }
 
-    #[cfg(procmacro2_semver_exempt)]
+    // #[cfg(procmacro2_semver_exempt)]
     pub fn source_file(&self) -> SourceFile {
         CODEMAP.with(|cm| {
             let cm = cm.borrow();
@@ -375,7 +375,7 @@ impl Span {
         })
     }
 
-    #[cfg(procmacro2_semver_exempt)]
+    // #[cfg(procmacro2_semver_exempt)]
     pub fn start(&self) -> LineColumn {
         CODEMAP.with(|cm| {
             let cm = cm.borrow();
@@ -384,7 +384,7 @@ impl Span {
         })
     }
 
-    #[cfg(procmacro2_semver_exempt)]
+    // #[cfg(procmacro2_semver_exempt)]
     pub fn end(&self) -> LineColumn {
         CODEMAP.with(|cm| {
             let cm = cm.borrow();
@@ -393,7 +393,7 @@ impl Span {
         })
     }
 
-    #[cfg(procmacro2_semver_exempt)]
+    // #[cfg(procmacro2_semver_exempt)]
     pub fn join(&self, other: Span) -> Option<Span> {
         CODEMAP.with(|cm| {
             let cm = cm.borrow();
@@ -411,11 +411,11 @@ impl Span {
 
 impl fmt::Debug for Span {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        #[cfg(procmacro2_semver_exempt)]
+        // #[cfg(procmacro2_semver_exempt)]
         return write!(f, "bytes({}..{})", self.lo, self.hi);
 
-        #[cfg(not(procmacro2_semver_exempt))]
-        write!(f, "Span")
+        // #[cfg(not(procmacro2_semver_exempt))]
+        // write!(f, "Span")
     }
 }
 
@@ -531,18 +531,18 @@ impl fmt::Display for Ident {
 
 impl fmt::Debug for Ident {
     // Ident(proc_macro), Ident(r#union)
-    #[cfg(not(procmacro2_semver_exempt))]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let mut debug = f.debug_tuple("Ident");
-        debug.field(&format_args!("{}", self));
-        debug.finish()
-    }
+    // #[cfg(not(procmacro2_semver_exempt))]
+    // fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    //     let mut debug = f.debug_tuple("Ident");
+    //     debug.field(&format_args!("{}", self));
+    //     debug.finish()
+    // }
 
     // Ident {
     //     sym: proc_macro,
     //     span: bytes(128..138)
     // }
-    #[cfg(procmacro2_semver_exempt)]
+    // #[cfg(procmacro2_semver_exempt)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut debug = f.debug_struct("Ident");
         debug.field("sym", &format_args!("{}", self));
@@ -677,7 +677,7 @@ impl fmt::Debug for Literal {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
         let mut debug = fmt.debug_struct("Literal");
         debug.field("lit", &format_args!("{}", self.text));
-        #[cfg(procmacro2_semver_exempt)]
+        // #[cfg(procmacro2_semver_exempt)]
         debug.field("span", &self.span);
         debug.finish()
     }
@@ -706,16 +706,16 @@ fn token_stream(mut input: Cursor) -> PResult<TokenStream> {
     Ok((input, TokenStream { inner: trees }))
 }
 
-#[cfg(not(procmacro2_semver_exempt))]
-fn spanned<'a, T>(
-    input: Cursor<'a>,
-    f: fn(Cursor<'a>) -> PResult<'a, T>,
-) -> PResult<'a, (T, ::Span)> {
-    let (a, b) = f(skip_whitespace(input))?;
-    Ok((a, ((b, ::Span::_new_stable(Span {})))))
-}
+// #[cfg(not(procmacro2_semver_exempt))]
+// fn spanned<'a, T>(
+//     input: Cursor<'a>,
+//     f: fn(Cursor<'a>) -> PResult<'a, T>,
+// ) -> PResult<'a, (T, ::Span)> {
+//     let (a, b) = f(skip_whitespace(input))?;
+//     Ok((a, ((b, ::Span::_new_stable(Span {})))))
+// }
 
-#[cfg(procmacro2_semver_exempt)]
+// #[cfg(procmacro2_semver_exempt)]
 fn spanned<'a, T>(
     input: Cursor<'a>,
     f: fn(Cursor<'a>) -> PResult<'a, T>,

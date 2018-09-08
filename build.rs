@@ -21,9 +21,9 @@ fn main() {
     if minor >= 29 || cfg!(feature = "nightly") {
         println!("cargo:rustc-cfg=wrap_proc_macro");
 
-        if cfg!(procmacro2_semver_exempt) {
+        // if cfg!(procmacro2_semver_exempt) {
             println!("cargo:rustc-cfg=super_unstable");
-        }
+        // }
     }
 
     if minor == 29 {
