@@ -1,3 +1,5 @@
+#![feature(proc_macro_def_site)]
+
 //! A "shim crate" intended to multiplex the [`proc_macro`] API on to stable
 //! Rust.
 //!
